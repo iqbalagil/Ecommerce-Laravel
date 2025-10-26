@@ -148,9 +148,12 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Run Prettier
-        run: npm run format:check --write
-        continue-on-error: true
+      - name: Auto-fix Prettier formatting
+        run: npx prettier resources/ -w
+
+      - name: Verify Prettier formatting
+        run: npm run format:check
+        continue-on-error: false
         if: always()
 
       - name: TypeScript check
