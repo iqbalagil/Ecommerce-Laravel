@@ -1,0 +1,11 @@
+{
+    "mcpServers": {
+        "laravel-boost": {
+            "command": "/var/home/iqbalagil/.config/herd-lite/bin/php",
+            "args": [
+                "/var/home/iqbalagil/Documents/Project_Porto/Ecommerce-Laravel/Ecommerce-Laravael/artisan",
+                "boost:mcp"
+            ]
+        }
+    }
+}
