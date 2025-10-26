@@ -1,0 +1,47 @@
+name: Scheduled Tasks
+
+on:
+  schedule:
+    # Run dependency updates check weekly on Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+jobs:
+  dependency-updates:
+    name: Check Dependency Updates
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+      
+      - name: Check Composer outdated packages
+        run: composer outdated --direct
+        continue-on-error: true
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      
+      - name: Check NPM outdated packages
+        run: npm outdated
+        continue-on-error: true
+  
+  health-check:
+    name: Production Health Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check production endpoint
+        run: |
+          STATUS=$(curl -o /dev/null -s -w "%{http_code}\n" https://your-domain.com/health)
+          if [ $STATUS -ne 200 ]; then
+            echo "Health check failed with status: $STATUS"
+            exit 1
+          fi
+        continue-on-error: true
